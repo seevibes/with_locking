@@ -21,12 +21,19 @@ A block of code can be executed like so:
 Alternatively, run the block of code with an optional name (recommended), that way multiple WithLocking blocks with different names can be invoked without conflicting:
 
     WithLocking.do(:name => "sleeper") { sleep 60 }
-    WithLocking.do(:name => "sleeper") { puts "I won't run because sleeper is still running the first block." }
+    WithLocking.do(:name => "sleeper") { puts "I won't execute and will return false because 'sleeper' is still running the first block." }
+    WithLocking.do(:name => "other_name") { puts "But I will run because I'm not running!" }
+    # => "But I will run because I'm not running!"
 
-To just test if a named block is still running use `locked?`:
+To simply test if a named block is still running without executing a block use the `locked?` method:
 
     WithLocking.locked?("sleeper")
     # => true or false
+
+To raise an exception when the block isn't run (rather than simply returning false), use the `do!` method:
+
+    WithLocking.do!(:name => "sleeper") { puts "I won't execute and will return false because 'sleeper' is still running the first block." }
+    # => raises an error
 
 ## Contributing
 
