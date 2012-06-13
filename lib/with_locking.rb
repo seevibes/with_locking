@@ -2,7 +2,7 @@ require "with_locking/version"
 
 module WithLocking 
 
-  def self.do(options = {}, &block)
+  def self.run(options = {}, &block)
     raise "No block given" unless block_given?
 
     name = options[:name] || "locking_service_task"
@@ -27,8 +27,8 @@ module WithLocking
     return true
   end
 
-  def self.do!(options = {}, &block)
-    raise "locked process still running" unless self.do(options, &block)
+  def self.run!(options = {}, &block)
+    raise "locked process still running" unless self.run(options, &block)
   end
 
   def self.locked?(name)
