@@ -16,17 +16,17 @@ Or install it yourself as:
 
 A block of code can be executed like so:
 
-  WithLocking.do { puts "While I'm running other code run through WithLocking cannot run!" }
+    WithLocking.do { puts "While I'm running other code run through WithLocking cannot run!" }
 
 Alternatively, run the block of code with an optional name (recommended), that way multiple WithLocking blocks with different names can be invoked without conflicting:
 
-  WithLocking.do(:name => "sleeper") { sleep 60 }
-  WithLocking.do(:name => "sleeper") { puts "I won't run because sleeper is still running the first block." }
+    WithLocking.do(:name => "sleeper") { sleep 60 }
+    WithLocking.do(:name => "sleeper") { puts "I won't run because sleeper is still running the first block." }
 
 To just test if a named block is still running use `locked?`:
 
-  WithLocking.locked?("sleeper")
-  # => true or false
+    WithLocking.locked?("sleeper")
+    # => true or false
 
 ## Contributing
 
