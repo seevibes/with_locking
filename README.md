@@ -33,7 +33,7 @@ To simply test if a named block is still running without executing a block use t
 To raise an exception when the block isn't run (rather than simply returning false), use the `do!` method:
 
     WithLocking.do!(:name => "sleeper") { puts "Blah" }
-    # => raises an error
+    # => raises an error if 'sleeper' block is still running from before
 
 ## Contributing
 
