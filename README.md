@@ -22,8 +22,8 @@ Alternatively, run the block of code with an optional name (recommended), that w
 
     WithLocking.do(:name => "sleeper") { sleep 60 }
     WithLocking.do(:name => "sleeper") { puts "I won't execute and will return false because 'sleeper' is still running the first block." }
-    WithLocking.do(:name => "other_name") { puts "But I will run because I'm not running!" }
-    # => "But I will run because I'm not running!"
+    WithLocking.do(:name => "other_name") { puts "But I will run because 'other_name' isn't running!" }
+    # => "But I will run because 'other_name' isn't running!"
 
 To simply test if a named block is still running without executing a block use the `locked?` method:
 
@@ -32,7 +32,7 @@ To simply test if a named block is still running without executing a block use t
 
 To raise an exception when the block isn't run (rather than simply returning false), use the `do!` method:
 
-    WithLocking.do!(:name => "sleeper") { puts "I won't execute and will return false because 'sleeper' is still running the first block." }
+    WithLocking.do!(:name => "sleeper") { puts "Blah" }
     # => raises an error
 
 ## Contributing
