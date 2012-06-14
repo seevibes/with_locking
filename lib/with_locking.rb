@@ -10,12 +10,8 @@ module WithLocking
       
     return false if File.exists? pid_file
 
-    begin 
-      Dir.mkdir("tmp")
-      Dir.mkdir("tmp/pids")
-    rescue Errno::EEXIST => e
-      # ignore this error
-    end
+    Dir.mkdir("tmp") unless Dir.exists?("tmp")
+    Dir.mkdir("tmp/pids") unless Dir.exists?("tmp/pids")
       
     File.open(pid_file, 'w') { |f| f.puts Process.pid }
       
