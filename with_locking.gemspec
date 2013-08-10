@@ -21,4 +21,5 @@ Gem::Specification.new do |gem|
   gem.name          = "with_locking"
   gem.require_paths = ["lib"]
   gem.version       = WithLocking::VERSION
+  gem.add_development_dependency "rspec"
 end

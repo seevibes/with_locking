@@ -38,7 +38,8 @@ describe WithLocking do
 
     it "raises an exception if the pid file already exists" do
       File.stub(:exists?).and_return(true)
-      lambda { WithLocking.run! {} }.should raise_error(RuntimeError, 'locked process still running')
+      message = 'locked process still running'
+      ->() { WithLocking.run! {} }.should raise_error(RuntimeError, message)
     end
 
   end
