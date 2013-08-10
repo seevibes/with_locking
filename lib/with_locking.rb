@@ -1,7 +1,6 @@
 require "with_locking/version"
 
 module WithLocking 
-
   def self.run(options = {}, &block)
     raise "No block given" unless block_given?
 
@@ -20,7 +19,7 @@ module WithLocking
     ensure
       File.delete pid_file
     end
-    return true
+    true
   end
 
   def self.run!(options = {}, &block)
@@ -30,5 +29,4 @@ module WithLocking
   def self.locked?(name)
     File.exists?("tmp/pids/#{name}.pid")
   end
-
 end

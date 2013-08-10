@@ -13,7 +13,7 @@ describe WithLocking do
 
     it "writes a pid file" do
       File.should_receive(:open).with(path, "w")
-      WithLocking.run(:name => file_name) { }
+      WithLocking.run(name: file_name) { }
     end
 
     it "executes the given block" do
@@ -24,7 +24,7 @@ describe WithLocking do
 
     it "deletes the pid file" do
       File.should_receive(:delete).with(path)
-      WithLocking.run(:name => file_name) {}
+      WithLocking.run(name: file_name) {}
     end
 
     it "should not execute the block if the pid file already exists" do
