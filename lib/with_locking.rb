@@ -1,11 +1,16 @@
 require "with_locking/version"
 
 module WithLocking 
+  class << self
+    attr_accessor :piddir
+  end
+
   def self.run(options = {}, &block)
     raise "No block given" unless block_given?
 
     name = options[:name] || "locking_service_task"
-    pid_file = File.join(options.fetch(:piddir, "tmp/pids"), "#{name}.pid")
+    piddir = options.fetch(:piddir, WithLocking.piddir || "tmp/pids")
+    pid_file = File.join(piddir, "#{name}.pid")
       
     return false if File.exists? pid_file
 

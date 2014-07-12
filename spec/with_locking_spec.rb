@@ -54,7 +54,7 @@ describe WithLocking do
   end
 end
 
-describe WithLocking, "with hard-coded piddir" do
+describe WithLocking, "with local piddir" do
   let(:path) { '/var/run/rspec_test.pid' }
   let(:file_name) { 'rspec_test' }
 
@@ -73,6 +73,38 @@ describe WithLocking, "with hard-coded piddir" do
     it "deletes the pid file" do
       File.should_receive(:delete).with(path)
       WithLocking.run(name: file_name, piddir: "/var/run") {}
+    end
+
+  end
+end
+
+describe WithLocking, "with global piddir" do
+  let(:path) { '/var/run/myapp/rspec_test.pid' }
+  let(:file_name) { 'rspec_test' }
+
+  before :each do
+    File.stub(:open)
+    File.stub(:delete)
+  end
+
+  before :each do
+    WithLocking.piddir = "/var/run/myapp"
+  end
+
+  after :each do
+    WithLocking.piddir = nil
+  end
+
+  describe "#run" do
+
+    it "writes a pid file" do
+      File.should_receive(:open).with(path, "w")
+      WithLocking.run(name: file_name) { }
+    end
+
+    it "deletes the pid file" do
+      File.should_receive(:delete).with(path)
+      WithLocking.run(name: file_name) {}
     end
 
   end
