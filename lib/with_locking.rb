@@ -9,7 +9,7 @@ module WithLocking
     raise "No block given" unless block_given?
 
     name = options[:name] || "locking_service_task"
-    piddir = options.fetch(:piddir, WithLocking.piddir || "tmp/pids")
+    piddir = options.fetch(:piddir, WithLocking.piddir || ENV["WITH_LOCKING_PIDDIR"] || "tmp/pids")
     pid_file = File.join(piddir, "#{name}.pid")
       
     return false if File.exists? pid_file
