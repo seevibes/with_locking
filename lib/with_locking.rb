@@ -14,9 +14,6 @@ module WithLocking
 
     return false if File.exists? pid_file
 
-    Dir.mkdir("tmp") unless Dir.exists?("tmp")
-    Dir.mkdir("tmp/pids") unless Dir.exists?("tmp/pids")
-
     File.open(pid_file, 'w') { |f| f.puts Process.pid }
 
     begin
