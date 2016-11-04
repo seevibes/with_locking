@@ -1,4 +1,5 @@
 require_relative '../lib/with_locking.rb'
+require "timecop"
 
 describe WithLocking do
   let(:path) { 'tmp/pids/rspec_test.pid' }
@@ -48,8 +49,7 @@ describe WithLocking do
   describe "#locked?" do
 
     it "checks if the file exists" do
-      File.should_receive(:exists?).with(path)
-      File.should_receive(:exists?).with(path)
+      File.should_receive(:exists?).with(path).twice
       WithLocking.locked?(file_name)
     end
 
@@ -64,7 +64,7 @@ describe WithLocking do
     end
 
     it "deletes the file if stale_seconds is provided" do
-      sleep(2)
+      Timecop.travel(Time.now.utc + 2)
       File.stub(:exists?).and_return(true)
       File.should_receive(:delete).with(path)
       WithLocking.remove_stale_file(name: file_name, stale_seconds: 1)
@@ -74,7 +74,7 @@ describe WithLocking do
 
   describe "#pid_staled" do
     it "returns true if stale" do
-      sleep(2)
+      Timecop.travel(Time.now.utc + 2)
       expect(WithLocking.pid_stale(name: file_name, stale_seconds: 1)).to be(true)
     end
 
