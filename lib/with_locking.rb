@@ -25,19 +25,19 @@ module WithLocking
     raise "locked process still running" unless self.run(options, &block)
   end
 
-  def self.remove_staled_file(options)
+  def self.remove_stale_file(options)
     return unless File.exists?(pidfile(options)) && options.include?(:stale_seconds)
-    File.delete(pidfile(options)) if pid_staled(options)
+    File.delete(pidfile(options)) if pid_stale(options)
   end
 
-  def self.pid_staled(options)
-    Time.now.utc.to_i - File.ctime(pidfile(options)).utc.to_i < options[:stale_seconds]
+  def self.pid_stale(options)
+    Time.now.utc.to_i - File.ctime(pidfile(options)).utc.to_i >= options[:stale_seconds]
   end
 
   def self.locked?(name_or_options)
     options = name_or_options.kind_of?(Hash) ? name_or_options : {}
     options = options.merge(name: name_or_options) unless options.include?(:name)
-    remove_staled_file(options)
+    remove_stale_file(options)
     File.exists?(pidfile(options))
   end
 

@@ -7,6 +7,7 @@ describe WithLocking do
   before :each do
     File.stub(:open)
     File.stub(:delete)
+    File.stub(:ctime).and_return(Time.now.utc)
   end
 
   describe "#run" do
@@ -48,10 +49,40 @@ describe WithLocking do
 
     it "checks if the file exists" do
       File.should_receive(:exists?).with(path)
+      File.should_receive(:exists?).with(path)
       WithLocking.locked?(file_name)
     end
 
   end
+
+  describe "#remove_staled_file" do
+
+    it "returns if the option :stale_seconds is not provided" do
+      File.should_receive(:exists?).with(path)
+      File.should_not_receive(:delete).with(path)
+      WithLocking.remove_stale_file(name: file_name)
+    end
+
+    it "deletes the file if stale_seconds is provided" do
+      sleep(2)
+      File.stub(:exists?).and_return(true)
+      File.should_receive(:delete).with(path)
+      WithLocking.remove_stale_file(name: file_name, stale_seconds: 1)
+    end
+
+  end
+
+  describe "#pid_staled" do
+    it "returns true if stale" do
+      sleep(2)
+      expect(WithLocking.pid_stale(name: file_name, stale_seconds: 1)).to be(true)
+    end
+
+    it "returns false if not stale" do
+      expect(WithLocking.pid_stale(name: file_name, stale_seconds: 1)).to be(false)
+    end
+  end
+
 end
 
 describe WithLocking, "with local piddir" do
